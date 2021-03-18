@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% load  static %}
+{% block content %}
+    <head xmlns="http://www.w3.org/1999/html">
+    <link rel="stylesheet" href="{% static "css/clientdetails.css" %}">
+    </head>
+    <div class="container light-style flex-grow-1 container-p-y" style="max-width: 1500px">
+    {% if  error is not None %}
+       <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endif %}
+     {% if  success is not None %}
+       <div class="alert alert-success" role="alert">
+            {{ success }}
+        </div>
+    {% endif %}
+    <h4 class="font-weight-bold py-3 mb-4">
+      Admin settings
+    </h4>
+
+
+    <div class="card overflow-hidden" style="margin-bottom: 50px">
+      <div class="row no-gutters row-bordered row-border-light">
+        <div class="col-md-2 pt-0">
+          <div class="list-group list-group-flush account-settings-links">
+            <a class="list-group-item list-group-item-action" href="/admin/purchases/">Purchases</a>
+              <a class="list-group-item list-group-item-action" href="/admin/users/">Users</a>
+              <a class="list-group-item list-group-item-action" href="/admin/apps/">Applications</a>
+              <a class="list-group-item list-group-item-action active" href="/admin/devs/">Add Developer</a>
+              <a class="list-group-item list-group-item-action" href="/admin/cat/">Add Category</a>
+            <a class="list-group-item list-group-item-action"  href="/account/">Account</a>
+          </div>
+        </div>
+        <div class="col-md-10">
+          <div class="tab-content">
+             <div class="tab-pane" id="admin-purchases" style="display: block; padding: 70px 0;" align="center">
+                 <div class="card-body pb-2" >
+                     <h3>Write the developer name</h3>
+                     <br>
+                     <form method="post">
+                {% csrf_token %}
+                  <div class="form-group">
+                         {{ form.name }}
+
+                  </div>
+                  <button type="submit" class="site-btn">Add developer</button>&nbsp;
+
+                 </form>
+                 </div>
+                 </div>
+                 </div>
+                 </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% load  static %}
+
+{% block content %}
+
+    <!-- About Section Begin -->
+    <section class="about spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="about__pic">
+                        <img src="{% static 'img/about/about-us.jpg' %}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="about__item">
+                        <h4>Who We Are?</h4>
+                        <p>An enterprise based on Aveiro, first introduced at University of Aveiro and now to the world.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="about__item">
+                        <h4>What we do?</h4>
+                        <p>This store is kept updated with the latest and greatest from developers from all over the world, ensuring the best price, secure apps and accessibility.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="about__item">
+                        <h4>Why Choose Us?</h4>
+                        <p>From different prices plans to a huge variety of applications, we are the one to choice when buying an app!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About Section End -->
+
+
+
+
+
+{% endblock %}

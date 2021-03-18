@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load  static %}
+{% block content %}
+
+<div class="container" style="justify-content: center">
+        <form method="post">
+                {% csrf_token %}
+             <p>
+                  {{ form.rating.label_tag }}
+                  <br>
+                  <div class="form-group" style="width: 25%">{{ form.rating }}</div>
+                  <p style="color: red">{{ form.rating.errors}}</p>
+              </p>
+              <p>
+                  {{ form.text.label_tag }}
+                  <br>
+                  <div class="form-group">{{ form.text }}</div>
+                  <p style="color: red">{{ form.text.errors}}</p>
+              </p>
+                <div class="text-right mt-3">
+                    <button type="submit" class="site-btn">Save changes</button>&nbsp;
+                </div>
+                </form>
+
+</div>
+
+{% endblock %}

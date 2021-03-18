@@ -1,0 +1,299 @@
+
+
+{% extends 'base.html' %}
+{% load  static %}
+{% block content %}
+
+    {% if  errors is not None %}
+       <div class="alert alert-danger" role="alert">
+            {{ errors }}
+        </div>
+    {% endif %}
+    {% if  successes is not None %}
+       <div class="alert alert-success" role="alert">
+            {{ successes }}
+        </div>
+    {% endif %}
+
+    <!-- Shop Details Section Begin -->
+    <section class="shop-details">
+        <div class="product__details__pic"  style="padding-top:0px;padding-bottom: 0px">
+            <div class="container" >
+                <div class="row">
+                    <div class="col-lg-3 col-md-9" style="padding-top: 40px;padding-bottom: 60px;">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                <div class="product__details__pic__item">
+                                    <img src="{{ prod.icon }}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-md-6" style=" padding-bottom: 15px ;margin-top:0%;padding-bottom: 0px">
+                        <div class="container-fluid>" style="padding-top: 40px;padding-bottom: 60px;">
+                            <div class="product__details__text" style=" border-left: #00000;border-left-width: 5px;border-left-style: outset; text-align: left;margin-left: 20%;padding-left: 18px;">
+                            <h3>{{ prod.name}}</h3>
+                                    <div class="rating">
+                                {% for _ in prod.nStars %}
+                                 <i class="fa fa-star"></i>
+                            {% endfor %}
+                            {% for _ in prod.nEmptyStars %}
+                                 <i class="fa fa-star-o"></i>
+                            {% endfor %}
+                                <span> Review{{ revs | pluralize }} ({{ revs | length }}) </span>
+                            </div>
+                            <p>{{ prod.description }}</p>
+
+
+                            <div class="product__details__last__option">
+                            <div style="padding-bottom:15px">
+                                <ul>
+                                    <span>Categories:</span>
+                                    {% for cat in prod.category.all %}
+                                       <li> {{ cat }}</li>
+                                    {% endfor %}
+                                    <br>
+                                    <span>Total Purchases:</span>
+
+                                       <li> {{ purch }}</li>
+
+                                </ul>
+                            </div>
+                             <div class="product__details__btns__option">
+                                 <form id="favoritesForm" name="myFormName" method="post" action=".">
+                                  <div class="modal-body">
+                                        {% csrf_token %}
+                                        {% for field in  form_fav %}
+                                            <p>
+                                        {{ field.as_hidden}}
+                                        {% endfor %}
+                                  </div>
+                                <a onclick="add_remove_favorites()" type="button"><i class="fa fa-heart"></i> {% if is_fav %}Remove from Favorites {% else %}Add to Favorites {% endif %}</a>
+                                  </form>
+                            </div>
+                            </div>
+                            </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="product__details__content" style="margin-bottom: 100px">
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="product__details__text">
+                             <h2><span>Check the Pricing Plans:</span></h2>
+                                <img src="img/shop-details/details-payment.png" alt="">
+                                 <div class="pricing card-deck flex-column flex-md-row mb-3 ">
+
+                                {% for plan in plans %}
+                                     <div class="card card-pricing text-center px-3 mb-4">
+                                        <span class="primary-btn w-60 mx-auto rounded-bottom px-4 py-1"  style="background: #c82333;font-size: 12px">{{ plan.plan_type }}</span>
+                                        <div class="bg-transparent card-header pt-4 border-0">
+                                            <h1 class="h1 font-weight-normal text-primary text-center mb-0" data-pricing-value="60">$<span class="price">{{ plan.price }}</span><span class="h6 text-muted ml-2"></span></h1>
+                                        </div>
+                                        <div class="card-body pt-0">
+                                            <ul class="list-unstyled mb-4">
+                                                <li>{{ plan.feature }}</li>
+                                            </ul>
+                                            <a  href="#" class="primary-btn" onclick="get_payment( {{ plan.id }} )" data-toggle="modal" data-target="#myModal" >Order now</a>
+                                        </div>
+                                    </div>
+                                 {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="product__details__tab">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a {% if revs.number == 1 %} class="nav-link active" {% else %} class="nav-link" {% endif %} data-toggle="tab" href="#tabs-5"
+                                    role="tab">Description</a>
+                                </li>
+                                <li   class="nav-item">
+                                    <a {% if revs.number > 1 %} class="nav-link active" {% else %} class="nav-link" {% endif %} data-toggle="tab" href="#tabs-6"
+                                    role="tab">Review{{ revs | pluralize }} ({{ numreviews }})</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">Product Benefits</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+
+                                <div  {% if revs.number == 1 %} class="tab-pane active" {% else %} class="tab-pane" {% endif %}id="tabs-5" role="tabpanel">
+                                    <div class="product__details__tab__content">
+                                        <div class="container">
+                                        <p class="note">Product Information</p>
+                                        <div class="product__details__tab__content__item">
+                                            <p>{{ prod.description }}</p>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div {% if revs.number > 1 %} class="tab-pane active" {% else %} class="tab-pane" {% endif %} class="tab-pane" id="tabs-6" role="tabpanel">
+                                    <div class="product__details__tab__content">
+
+
+                                        {% if revs %}
+                                        {% for rev in revs %}
+                                            <div class="product__details__tab__content__item">
+                                            <div class="container">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-2">
+                                                                <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid"/>
+                                                                <p class="text-secondary text-center">{{ rev.date }}</p>
+                                                            </div>
+                                                            <div class="col-md-10">
+                                                                <p>
+                                                                    <a class="float-left" href="https://maniruzzaman-akash.blogspot.com/p/contact.html"><strong>{{ rev.author }}</strong></a>
+                                                                    {% for _ in rev.nEmptyStars %}
+                                                                          <span class="float-right"><i class="text-warning fa fa-star-o"></i></span>
+                                                                    {% endfor %}
+                                                                 {% for _ in rev.nStars %}
+                                                                          <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                                                    {% endfor %}
+                                                               </p>
+                                                               <div class="clearfix"></div>
+                                                                <p>{{ rev.body }}</p>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        {% endfor %}
+                                             <div class=" container text-right mt-3" style=" padding-bottom: 20px">
+                                                {% if has_rev %}
+                                                <a href="{% url 'prodreview' idprod=prod.id %}" type="button" class="site-btn">Edit Review</a>
+                                                {% else %}
+                                                <a href="{% url 'prodreview' idprod=prod.id %}" type="button" class="site-btn">Add Review</a>
+                                                {% endif %}
+                                            </div>
+
+                                               <div class="pagination container">
+                                            <span class="step-links" style="padding-left: 41%">
+                                                <span class="current" >
+                                                    <h5 class="text-center">Page {{ revs.number }} of {{ revs.paginator.num_pages }} Reviews </h5>
+                                                </span>
+                                                 {% if revs.has_previous %}
+                                                    <a  style="padding: 10px;" href="?page=1">&laquo; first</a>
+                                                    <a  style="padding: 10px;" href="?page={{ revs.previous_page_number }}">previous</a>
+                                                {% endif %}
+
+                                                {% if revs.has_next %}
+                                                    <a style="padding: 10px;" href="?page={{ revs.next_page_number }}">next</a>
+                                                    <a style="padding-left: 10px" href="?page={{ revs.paginator.num_pages }}">last &raquo;</a>
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                        {% else %}
+                                        <h4 class="text-center">There are no Reviews for this Product! Be the first to Review it! </h4>
+                                         <div class=" container text-center mt-3" style=" padding-bottom: 20px">
+                                            {% if has_rev %}
+                                            <a href="{% url 'prodreview' idprod=prod.id %}" type="button"    class="site-btn">Edit Review</a>
+                                            {% else %}
+                                            <a href="{% url 'prodreview' idprod=prod.id  %}" type="button" class="site-btn">Add Review</a>
+                                            {% endif %}
+                                        </div>
+                                        {% endif %}
+
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="tabs-7" role="tabpanel">
+                                    <div class="product__details__tab__content">
+                                    <div class="container">
+                                        {% if prodbenefs  %}
+                                        {% for benefit in prodbenefs %}
+                                        <div class="product__details__tab__content__item">
+                                            <h5>{{ benefit.title }}</h5>
+                                            <p> {{ benefit.description }}</p>
+                                        </div>
+                                        {% endfor %}
+                                        {% else %}
+                                        <h4 class="text-center">The Developer hasn't defined any benefit for this app!</h4>
+                                        {% endif %}
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <br>
+                         <br>
+                         <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </section>
+    <!-- Shop Details Section End -->
+
+    <!-- Product Checkout-->
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Purchase Confirmation</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+         <form id="myForm" name="myFormName" method="post" action=".">
+
+      <div class="modal-body">
+        Are you Sure you want to buy this product?
+            {% csrf_token %}
+            {% for field in form_purch %}
+                <p>
+            {{ field.as_hidden}}
+            {% endfor %}
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+       <button type="button"  onclick="proceed_checkout()" class="btn btn-success" data-dismiss="modal">Confirm Purchase</button>
+      </div>
+    </form>
+
+    </div>
+  </div>
+</div>
+
+
+{%  endblock %}
+
+{% block javascript %}
+<script>
+    var type_payment=null
+    function get_payment (id) {
+        type_payment=id
+        console.log(type_payment)
+    }
+    function  add_remove_favorites(){
+        $("#id_favorites").val(true)
+        $("#favoritesForm").submit()
+    }
+
+    function  proceed_checkout( ) {
+    $("#id_productid").val({{ prod.id }})
+    console.log("alalal" + type_payment)
+    $("#id_paymenttype").val(type_payment)
+     $("#myForm").submit();
+    }
+</script>
+{% endblock %}
+
